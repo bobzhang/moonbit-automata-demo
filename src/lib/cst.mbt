@@ -7,7 +7,8 @@
 // ['plus', "ab+"] -> Plus(Seq(Char('a'), Char('b')))
 // ['opt', "ab?"] -> Opt(Seq(Char('a'), Char('b')))
 
-pub fn parse(cst : Json) -> Regex! {
+///|
+pub fn parse(cst : Json) -> Regex raise {
   match cst {
     String(s) => {
       // TODO: reduce the Empty usage  
@@ -17,11 +18,11 @@ pub fn parse(cst : Json) -> Regex! {
       }
       acc
     }
-    ["or", a, b] => Alt(parse!(a), parse!(b))
-    ["seq", a, b] => Seq(parse!(a), parse!(b))
-    ["star", a] => Star(parse!(a))
-    ["plus", a] => Plus(parse!(a))
-    ["opt", a] => Opt(parse!(a))
-    _ => fail!("invalid cst \{cst}")
+    ["or", a, b] => Alt(parse(a), parse(b))
+    ["seq", a, b] => Seq(parse(a), parse(b))
+    ["star", a] => Star(parse(a))
+    ["plus", a] => Plus(parse(a))
+    ["opt", a] => Opt(parse(a))
+    _ => fail("invalid cst \{cst}")
   }
 }

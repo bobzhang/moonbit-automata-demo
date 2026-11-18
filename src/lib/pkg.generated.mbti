@@ -1,0 +1,89 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "username/hello/lib"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/immut/sorted_set",
+  "moonbitlang/core/json",
+  "moonbitlang/core/set",
+}
+
+// Values
+pub fn closure_of_set(@sorted_set.SortedSet[State]) -> @sorted_set.SortedSet[State]
+
+pub fn edges_of_closure(@sorted_set.SortedSet[State]) -> @sorted_set.SortedSet[Char]
+
+pub fn hello() -> String
+
+pub fn parse(@json.Json) -> Regex raise
+
+pub fn regex_to_nfa(Regex) -> NFA
+
+pub fn reset_dfa_id() -> Unit
+
+pub fn reset_id() -> Unit
+
+pub fn step_of_closure(@sorted_set.SortedSet[State], Char) -> @sorted_set.SortedSet[State]
+
+// Errors
+
+// Types and methods
+#derive(Show)
+type DFAId
+
+pub struct DFAState {
+  id : DFAId
+  trainsitions : Map[Char, DFAState]
+  final : Bool
+}
+pub fn DFAState::connect_to(Self, Self, edge~ : Char) -> Unit
+pub fn DFAState::new(final? : Bool) -> Self
+pub fn DFAState::to_mermaid(Self) -> String
+
+#derive(Default, @json.ToJson)
+pub enum Edge {
+  Epsilon
+  Char(Char)
+}
+pub fn Edge::to_string(Self) -> String
+
+#derive(Compare, Default, Eq, @json.ToJson)
+type Id
+pub fn Id::to_string(Self) -> String
+
+pub struct NFA {
+  start : State
+  states : Array[State]
+  final : State
+}
+pub fn NFA::new(start~ : State, states~ : Array[State], final~ : State) -> Self
+pub fn NFA::to_dfa(Self) -> DFAState
+pub fn NFA::to_mermaid(Self) -> String
+
+#derive(@debug.Debug, @json.ToJson)
+pub enum Regex {
+  Seq(Regex, Regex)
+  Alt(Regex, Regex)
+  Star(Regex)
+  Plus(Regex)
+  Opt(Regex)
+  Char(Char)
+  Empty
+}
+pub impl Show for Regex
+
+pub struct State {
+  id : Id
+  transitions : Array[(Edge, State)]
+}
+pub fn State::closure(Self) -> @set.Set[Self]
+pub fn State::connect_to(Self, Self, edge? : Char) -> Unit
+pub fn State::new(name? : String) -> Self
+pub impl Compare for State
+pub impl Eq for State
+pub impl Show for State
+pub impl @json.ToJson for State
+
+// Type aliases
+
+// Traits
