@@ -1,6 +1,6 @@
 type DFAId Int derive(Show)
 
-let dfa_id : Ref[Int] = Ref::new(0)
+let dfa_id : Ref[Int] = Ref::Ref(0)
 
 pub fn reset_dfa_id() -> Unit {
   dfa_id.val = 0
@@ -23,7 +23,7 @@ pub fn connect_to(self : DFAState, state : DFAState, ~edge : Char) -> Unit {
 }
 
 pub fn to_mermaid(self : DFAState) -> String {
-  let sb = StringBuilder::new()
+  let sb = StringBuilder::StringBuilder()
   loop @immut/list.Cons(self, Nil) {
     Nil => ()
     Cons(current, rest) => {
