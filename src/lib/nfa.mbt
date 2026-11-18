@@ -76,16 +76,16 @@ fn op_equal(self : State, other : State) -> Bool {
 }
 
 pub fn closure(self : State) -> Set[State] {
-  let result = Set::of([self])
-  for curr_states = Set::of([self]) {
+  let result = Set::from_array([self])
+  for curr_states = Set::from_array([self]) {
     let fresh_added = Set::new()
     for st in curr_states {
       for trans in st.transitions {
         match trans.0 {
           Epsilon =>
             if result.contains(trans.1).not() {
-              fresh_added.insert(trans.1)
-              result.insert(trans.1)
+              fresh_added.add(trans.1)
+              result.add(trans.1)
             }
           Char(_) => ()
         }
@@ -188,7 +188,7 @@ pub fn connect_to(self : State, other : State, ~edge? : Char) -> Unit {
 }
 
 pub fn to_mermaid(self : NFA) -> String {
-  let sb = StringBuilder::new()
+  let sb = StringBuilder::StringBuilder()
   let indent = "  "
   for state in self.states {
     if state.id.description != None {
