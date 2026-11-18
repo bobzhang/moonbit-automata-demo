@@ -1,3 +1,5 @@
+///|
+#derive(Debug, ToJson)
 pub enum Regex {
   Seq(Regex, Regex)
   Alt(Regex, Regex)
@@ -6,8 +8,9 @@ pub enum Regex {
   Opt(Regex) // e?
   Char(Char)
   Empty // matches empty string
-} derive(Show, ToJson)
+}
 
+///|
 pub fn regex_to_nfa(regex : Regex) -> NFA {
   match regex {
     Seq(r1, r2) => {
@@ -30,9 +33,9 @@ pub fn regex_to_nfa(regex : Regex) -> NFA {
       nfa1.final.connect_to(final)
       nfa2.final.connect_to(final)
       NFA::new(
-        ~start,
+        start~,
         states=[..nfa1.states, ..nfa2.states, start, final],
-        ~final,
+        final~,
       )
     }
     Opt(r) => {
@@ -44,19 +47,24 @@ pub fn regex_to_nfa(regex : Regex) -> NFA {
       let start = State::new()
       let final = State::new()
       start.connect_to(final, edge=c)
-      NFA::new(~start, states=[start, final], ~final)
+      NFA::new(start~, states=[start, final], final~)
     }
     Empty => {
       let start = State::new()
-      NFA::new(~start, states=[start], final=start)
+      NFA::new(start~, states=[start], final=start)
     }
     Star(r) => {
       let start = State::new()
       let nfa = regex_to_nfa(r)
       start.connect_to(nfa.start)
       nfa.final.connect_to(start)
-      NFA::new(~start, states=[..nfa.states, start], final=start)
+      NFA::new(start~, states=[..nfa.states, start], final=start)
     }
     Plus(r) => regex_to_nfa(Seq(r, Star(r)))
   }
+}
+
+///|
+pub impl Show for Regex with fn output(self, logger) {
+  logger.write_object(Repr(self))
 }

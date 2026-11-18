@@ -1,2 +1,7 @@
 import {
+  "moonbitlang/core/immut/sorted_set",
 }
+
+import {
+  "moonbitlang/core/test",
+} for "test"

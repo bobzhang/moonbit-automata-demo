@@ -1,16 +1,19 @@
+///|
 test {
-  inspect!(
-    @lib.parse?("abcd").unwrap(),
+  debug_inspect(
+    (Ok(@lib.parse("abcd")) catch { error => Err(error) }).unwrap(),
     content="Seq(Seq(Seq(Seq(Empty, Char('a')), Char('b')), Char('c')), Char('d'))",
   )
-  inspect!(
-    @lib.parse?(["star", "a"]).unwrap(),
+  debug_inspect(
+    (Ok(@lib.parse(["star", "a"])) catch { error => Err(error) }).unwrap(),
     content="Star(Seq(Empty, Char('a')))",
   )
 
   //a+b+
-  inspect!(
-    @lib.parse?(["seq", ["plus", "a"], ["plus", "b"]]),
+  debug_inspect(
+    Ok(@lib.parse(["seq", ["plus", "a"], ["plus", "b"]])) catch {
+      error => Err(error)
+    },
     content="Ok(Seq(Plus(Seq(Empty, Char('a'))), Plus(Seq(Empty, Char('b')))))",
   )
 }
