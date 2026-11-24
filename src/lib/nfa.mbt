@@ -109,8 +109,8 @@ pub fn State::closure(self : State) -> Set[State] {
         match trans.0 {
           Epsilon =>
             if !result.contains(trans.1) {
-              fresh_added.add(trans.1)
-              result.add(trans.1)
+              fresh_added.insert(trans.1)
+              result.insert(trans.1)
             }
           Char(_) => ()
         }
@@ -133,14 +133,14 @@ pub fn closure_of_set(
 ) -> @sorted_set.SortedSet[State] {
   let mut result = states
   for curr_states = states {
-    let mut fresh_added = @sorted_set.new()
+    let mut fresh_added = @sorted_set.empty()
     for st in curr_states {
       for trans in st.transitions {
         match trans.0 {
           Epsilon =>
             if !result.contains(trans.1) {
-              fresh_added = fresh_added.add(trans.1)
-              result = result.add(trans.1)
+              fresh_added = fresh_added.insert(trans.1)
+              result = result.insert(trans.1)
               // result.insert(trans.1)
             }
           Char(_) => ()
@@ -161,12 +161,12 @@ pub fn closure_of_set(
 pub fn edges_of_closure(
   states : @sorted_set.SortedSet[State],
 ) -> @sorted_set.SortedSet[Char] {
-  let mut edges = @sorted_set.new()
+  let mut edges = @sorted_set.empty()
   for state in states {
     for trans in state.transitions {
       match trans.0 {
         Epsilon => ()
-        Char(c) => edges = edges.add(c)
+        Char(c) => edges = edges.insert(c)
       }
     }
   }
@@ -178,12 +178,12 @@ pub fn step_of_closure(
   states : @sorted_set.SortedSet[State],
   edge : Char,
 ) -> @sorted_set.SortedSet[State] {
-  let mut result = @sorted_set.new()
+  let mut result = @sorted_set.empty()
   for state in states {
     for trans in state.transitions {
       match trans.0 {
         Epsilon => ()
-        Char(c) => if c == edge { result = result.add(trans.1) }
+        Char(c) => if c == edge { result = result.insert(trans.1) }
       }
     }
   }
